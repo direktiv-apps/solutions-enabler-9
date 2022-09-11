@@ -21,6 +21,7 @@ info:
       This approach means that this function can not be run in parallel with different netcnfg configurations and therefore can not 
       be used as namespace service or with different configurations within a workflow. 
 
+
       The `netcnfg` file can be provided as workflow or namespace variable as well as direktiv file in the function payload.
 consumes:
 - application/json

@@ -17,6 +17,7 @@ Run solutions-enabler9 in Direktiv
 This function provides EMC's Solutions Enabler CLI version 9.2.3.4. The only default environment variable set is SYMCLI_OFFLINE.
 
 It uses a `netcnfg` file in the working directory and copies it to the target location `/usr/emc/API/symapi/config/netcnfg`.  This approach means that this function can not be run in parallel with different netcnfg configurations and therefore can not  be used as namespace service or with different configurations within a workflow. 
+
 The `netcnfg` file can be provided as workflow or namespace variable as well as direktiv file in the function payload.
 
 ### Example(s)

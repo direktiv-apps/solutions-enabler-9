@@ -39,7 +39,7 @@ func init() {
       "container": "gcr.io/direktiv/functions/solutions-enabler9",
       "issues": "https://github.com/direktiv-apps/solutions-enabler9/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "This function provides EMC's Solutions Enabler CLI version 9.2.3.4. The only default environment variable set is SYMCLI_OFFLINE.\n\nIt uses a ` + "`" + `netcnfg` + "`" + ` file in the working directory and copies it to the target location ` + "`" + `/usr/emc/API/symapi/config/netcnfg` + "`" + `.  This approach means that this function can not be run in parallel with different netcnfg configurations and therefore can not  be used as namespace service or with different configurations within a workflow. \nThe ` + "`" + `netcnfg` + "`" + ` file can be provided as workflow or namespace variable as well as direktiv file in the function payload.",
+      "long-description": "This function provides EMC's Solutions Enabler CLI version 9.2.3.4. The only default environment variable set is SYMCLI_OFFLINE.\n\nIt uses a ` + "`" + `netcnfg` + "`" + ` file in the working directory and copies it to the target location ` + "`" + `/usr/emc/API/symapi/config/netcnfg` + "`" + `.  This approach means that this function can not be run in parallel with different netcnfg configurations and therefore can not  be used as namespace service or with different configurations within a workflow. \n\nThe ` + "`" + `netcnfg` + "`" + ` file can be provided as workflow or namespace variable as well as direktiv file in the function payload.",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/solutions-enabler9"
     }
@@ -303,7 +303,7 @@ func init() {
       "container": "gcr.io/direktiv/functions/solutions-enabler9",
       "issues": "https://github.com/direktiv-apps/solutions-enabler9/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "This function provides EMC's Solutions Enabler CLI version 9.2.3.4. The only default environment variable set is SYMCLI_OFFLINE.\n\nIt uses a ` + "`" + `netcnfg` + "`" + ` file in the working directory and copies it to the target location ` + "`" + `/usr/emc/API/symapi/config/netcnfg` + "`" + `.  This approach means that this function can not be run in parallel with different netcnfg configurations and therefore can not  be used as namespace service or with different configurations within a workflow. \nThe ` + "`" + `netcnfg` + "`" + ` file can be provided as workflow or namespace variable as well as direktiv file in the function payload.",
+      "long-description": "This function provides EMC's Solutions Enabler CLI version 9.2.3.4. The only default environment variable set is SYMCLI_OFFLINE.\n\nIt uses a ` + "`" + `netcnfg` + "`" + ` file in the working directory and copies it to the target location ` + "`" + `/usr/emc/API/symapi/config/netcnfg` + "`" + `.  This approach means that this function can not be run in parallel with different netcnfg configurations and therefore can not  be used as namespace service or with different configurations within a workflow. \n\nThe ` + "`" + `netcnfg` + "`" + ` file can be provided as workflow or namespace variable as well as direktiv file in the function payload.",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/solutions-enabler9"
     }
