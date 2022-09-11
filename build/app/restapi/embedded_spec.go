@@ -34,7 +34,7 @@ func init() {
     "version": "1.0",
     "x-direktiv-meta": {
       "categories": [
-        "unknown"
+        "infrastructure"
       ],
       "container": "gcr.io/direktiv/functions/solutions-enabler9",
       "issues": "https://github.com/direktiv-apps/solutions-enabler9/issues",
@@ -298,7 +298,7 @@ func init() {
     "version": "1.0",
     "x-direktiv-meta": {
       "categories": [
-        "unknown"
+        "infrastructure"
       ],
       "container": "gcr.io/direktiv/functions/solutions-enabler9",
       "issues": "https://github.com/direktiv-apps/solutions-enabler9/issues",

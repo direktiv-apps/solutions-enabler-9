@@ -4,7 +4,7 @@
 Run solutions-enabler9 in Direktiv
 
 ---
-- #### Categories: unknown
+- #### Categories: infrastructure
 - #### Image: gcr.io/direktiv/functions/solutions-enabler9 
 - #### License: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
 - #### Issue Tracking: https://github.com/direktiv-apps/solutions-enabler9/issues
