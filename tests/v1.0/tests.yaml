@@ -1,0 +1,30 @@
+url: ""
+functions:
+- type: knative-workflow
+  id: solutions-enabler9
+  image: gcr.io/direktiv/functions/solutions-enabler9:test
+states:
+- id: state0
+  type: action
+  action:
+    function: solutions-enabler9
+    input:
+      commands:
+      - command: symcfg -services list
+      envs:
+      - name: SYMCLI_OFFLINE
+        value: 1
+      files:
+      - data: SYMAPI_SERVER - TCPIP node001 12.345.67.89 7777 ANY
+        name: netcnfg
+  transition: state1
+- id: state1
+  type: action
+  action:
+    function: solutions-enabler9
+    input:
+      commands:
+      - command: bash -c 'symcfg -services list -output xml_element | xq .'
+      files:
+      - data: SYMAPI_SERVER - TCPIP node001 12.345.67.89 7777 ANY
+        name: netcnfg

@@ -1,0 +1,223 @@
+swagger: "2.0"
+info:
+  description: Run solutions-enabler9 in Direktiv
+  title: solutions-enabler9
+  version: "1.0"
+  x-direktiv-meta:
+    container: gcr.io/direktiv/functions/solutions-enabler9
+    maintainer: |-
+      [direktiv.io](https://www.direktiv.io) 
+    issues: https://github.com/direktiv-apps/solutions-enabler9/issues
+    url: https://github.com/direktiv-apps/solutions-enabler9  
+    categories:
+    - unknown
+    license: |-
+      [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
+    long-description: >-
+      This function provides EMC's Solutions Enabler CLI version 9.2.3.4. The only default environment variable set is SYMCLI_OFFLINE.
+      It uses a `netcnfg` file in the working directory and copies it to the target location `/usr/emc/API/symapi/config/netcnfg`. 
+      This approach means that this function can not be run in parallel with different netcnfg configurations and therefore can not 
+      be used as namespace service or with different configurations within a workflow. 
+consumes:
+- application/json
+produces:
+- application/json
+schemes:
+- http
+paths:
+  /: 
+    delete:
+      parameters:
+        - name: Direktiv-ActionID
+          in: header
+          type: string
+          description: |
+            On cancel Direktiv sends a DELETE request to
+            the action with id in the header
+      x-direktiv:
+        cancel: echo 'cancel {{ .DirektivActionID }}'
+      responses:
+        200:
+    post:
+      parameters:
+        - name: Direktiv-ActionID
+          in: header
+          type: string
+          default: development
+          description: |
+            direktiv action id is an UUID. 
+            For development it can be set to 'development'
+        - name: Direktiv-TempDir
+          in: header
+          type: string
+          default: /tmp
+          description: |
+            direktiv temp dir is the working directory for that request
+            For development it can be set to e.g. '/tmp'
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              files:
+                type: array
+                items:
+                  $ref: '#/definitions/direktivFile'
+                description: File to create before running commands.
+                default: []
+              commands:
+                type: array
+                description: Array of commands.
+                items:
+                  type: object
+                  properties:
+                    command:
+                      type: string
+                      description: Command to run
+                    silent: 
+                      type: boolean
+                      description: If set to false the command will not print output to logs.
+                      default: false
+                    print: 
+                      type: boolean
+                      description: If set to false the command will not print the full command with arguments to logs.
+                      default: true
+                    continue: 
+                      type: boolean
+                      description: Stops excecution if command fails, otherwise proceeds with next command 
+                    envs:
+                      type: array
+                      description: Environment variables set for each command.
+                      example: 
+                      - name: SYMCLI_CONNECT_TYPE
+                        value: REMOTE
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            description: Name of the variable.
+                            type: string
+                          value:
+                            description: Value of the variable.
+                            type: string    
+                default: 
+                - command: echo Hello
+      # direktiv code generation is configured here
+      x-direktiv-function: |-
+        functions:
+        - id: solutions-enabler9
+          image: gcr.io/direktiv/functions/solutions-enabler9:1.0
+          type: knative-workflow
+      x-direktiv-examples:
+        # ADD MORE EXAMPLES HERE
+        - title: Basic
+          content: |-
+            - id: solutions-enabler9
+              type: action
+              action:
+                function: solutions-enabler9
+                input: 
+                  files:
+                  - name: netcnfg
+                    data: SYMAPI_SERVER - TCPIP node001 12.345.67.89 7777 ANY
+                  commands:
+                  - command: symcfg -services list
+                  envs:
+                  - name: SYMCLI_OFFLINE
+                    value: 1
+        - title: JSON output
+          content: |-
+            - id: solutions-enabler9
+              type: action
+              action:
+                function: solutions-enabler9
+                input: 
+                  files:
+                  - name: netcnfg
+                    data: SYMAPI_SERVER - TCPIP node001 12.345.67.89 7777 ANY
+                  commands:
+                  - command: bash -c 'symcfg -services list -output xml_element | xq .'
+      x-direktiv:  
+        cmds:
+        - action: exec
+          exec: cp netcnfg /usr/emc/API/symapi/config/netcnfg
+          silent: true
+          print: false
+        - action: foreach
+          loop: .Commands
+          exec: '{{ .Item.Command }}'
+          silent: '{{ .Item.Silent }}'
+          print: '{{ .Item.Print }}'
+          continue: '{{ .Item.Continue }}'
+          runtime-envs: |
+            [
+            {{- range $index, $element := .Item.Envs }}
+            {{- if $index}},{{- end}}
+            "{{ $element.Name }}={{ $element.Value }}"
+            {{- end }}
+            ]
+        output: |
+          {
+            "solutions-enabler9": {{ index . 1 | toJson }}
+          }
+      x-direktiv-errors:
+        io.direktiv.command.error: Command execution failed
+        io.direktiv.output.error: Template error for output generation of the service
+        io.direktiv.ri.error: Can not create information object from request
+      responses:
+        200:
+          description: List of executed commands.
+          examples:
+            solutions-enabler9:
+            - result:
+                SymCLI_ML:
+                  Network_Service:
+                    name: SYMAPI_SERVER
+                    node_address: 12.345.67.89
+                    node_name: node001
+                    node_port: '7777'
+                    node_seclevel: ANY
+                    pairing_method: Single
+                    type: TCPIP
+              success: true
+          schema:
+            type: object
+            properties:
+              solutions-enabler9:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - success
+                  - result
+                  properties:
+                    success:
+                      type: boolean
+                    result:
+                      additionalProperties: {}
+        default:
+          description: generic error response
+          headers:
+            Direktiv-ErrorCode:
+              type: string
+            Direktiv-ErrorMessage:
+              type: string
+          schema:
+            $ref: "#/definitions/error"
+definitions:
+  direktivFile:
+    type: object
+    x-go-type:
+      type: DirektivFile
+      import:
+        package: github.com/direktiv/apps/go/pkg/apps 
+  error:
+    type: object
+    required:
+      - errorCode
+      - errorMessage
+    properties:
+      errorCode:
+        type: string
+      errorMessage:
+        type: string
